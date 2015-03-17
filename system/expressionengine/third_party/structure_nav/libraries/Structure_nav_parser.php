@@ -36,7 +36,7 @@ class Structure_nav_parser
 
         $dom = new DOMDocument();
 
-        $dom->loadHTML($html);
+        $dom->loadHTML('<!doctype html>'.$html);
 
         $ul = $dom->getElementById('nav-sub');
 
