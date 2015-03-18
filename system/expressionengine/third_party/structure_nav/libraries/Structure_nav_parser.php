@@ -34,6 +34,11 @@ class Structure_nav_parser
 
         unset($structure);
 
+        if($html == null)
+        {
+            return false;
+        }
+
         $dom = new DOMDocument();
 
         $dom->loadHTML('<!doctype html>'.$html);
