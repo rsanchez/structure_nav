@@ -34,9 +34,9 @@ class Structure_nav_parser
 
         unset($structure);
 
-        if($html == null)
+        if ( ! $html)
         {
-            return false;
+            return array();
         }
 
         $dom = new DOMDocument();

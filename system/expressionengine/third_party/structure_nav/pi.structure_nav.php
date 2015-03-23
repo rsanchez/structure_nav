@@ -14,7 +14,7 @@
 
 $plugin_info = array(
     'pi_name'   => 'Structure Nav',
-    'pi_version'  => '1.0.1',
+    'pi_version'  => '1.0.2',
     'pi_author'   => 'rsanchez',
     'pi_author_url' => 'https://github.com/rsanchez',
     'pi_description'=> 'Tag pair for custom Structure navigation',
@@ -37,32 +37,25 @@ class Structure_nav
         require_once PATH_THIRD.'structure_nav/libraries/Structure_nav_parser.php';
     }
 
-    public function basic()
+    public function basic($add_entry_vars = FALSE)
     {
         $nav = new Structure_nav_parser();
 
-        $variables = $nav->get_variables();
+        $variables = $nav->get_variables($add_entry_vars);
 
-        if($variables)
+        unset($nav);
+
+        if ( ! $variables)
         {
-            unset($nav);
-
-            return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+            return ee()->TMPL->no_results();
         }
+
+        return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
     }
 
     public function advanced()
     {
-        $nav = new Structure_nav_parser();
-
-        $variables = $nav->get_variables(true);
-
-        if($variables)
-        { 
-            unset($nav);
-
-            return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
-        }
+        return $this->basic(TRUE);
     }
 }
 
