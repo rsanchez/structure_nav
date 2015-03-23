@@ -34,9 +34,14 @@ class Structure_nav_parser
 
         unset($structure);
 
+        if($html == null)
+        {
+            return false;
+        }
+
         $dom = new DOMDocument();
 
-        $dom->loadHTML($html);
+        $dom->loadHTML('<!doctype html>'.$html);
 
         $ul = $dom->getElementById('nav-sub');
 

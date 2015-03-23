@@ -43,9 +43,12 @@ class Structure_nav
 
         $variables = $nav->get_variables();
 
-        unset($nav);
+        if($variables)
+        {
+            unset($nav);
 
-        return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+            return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+        }
     }
 
     public function advanced()
@@ -54,9 +57,12 @@ class Structure_nav
 
         $variables = $nav->get_variables(true);
 
-        unset($nav);
+        if($variables)
+        { 
+            unset($nav);
 
-        return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+            return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $variables);
+        }
     }
 }
 
