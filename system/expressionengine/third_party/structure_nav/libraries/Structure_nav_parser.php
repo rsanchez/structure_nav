@@ -12,6 +12,17 @@ class Structure_nav_parser
         $this->original_TMPL = ee()->TMPL;
 
         ee()->TMPL = clone $this->original_TMPL;
+
+        //publisher installed?
+        $publisher_installed = ee()->db->select('module_id')->from('modules')->where('module_name', 'Publisher')->get();
+        //set the vars
+        $this->table_prefix = 'channel';
+        $this->publisher_installed = true;
+        if ($publisher_installed->num_rows() > 0)
+        {
+            $this->publisher_installed = true;
+            $this->table_prefix = 'publisher';
+        }
     }
 
     public function get_variables($add_entry_vars = false)
@@ -50,15 +61,24 @@ class Structure_nav_parser
         if ($add_entry_vars)
         {
             // inject custom fields etc
-            $query = ee()->db->select('channel_titles.*')
-                ->select('channel_data.*')
+           ee()->db->select($this->table_prefix.'_titles.*')
+                ->select($this->table_prefix.'_data.*')
                 ->select('channels.field_group')
                 ->select('channels.channel_title AS channel')
                 ->select('channels.channel_name AS channel_short_name')
-                ->where_in('channel_titles.entry_id', $this->entry_ids)
-                ->join('channel_data', 'channel_data.entry_id = channel_titles.entry_id')
-                ->join('channels', 'channels.channel_id = channel_titles.channel_id')
-                ->get('channel_titles');
+                ->where_in($this->table_prefix.'_titles.entry_id', $this->entry_ids)
+                ->join($this->table_prefix.'_data', $this->table_prefix.'_data.entry_id = '.$this->table_prefix.'_titles.entry_id')
+                ->join('channels', 'channels.channel_id = '.$this->table_prefix.'_titles.channel_id');
+
+            //publisher
+            if($this->publisher_installed)
+            {
+                ee()->db->where($this->table_prefix.'_data.publisher_lang_id', ee()->publisher_lib->lang_id);
+                ee()->db->where($this->table_prefix.'_titles.publisher_lang_id', ee()->publisher_lib->lang_id);
+            }
+
+            //get the result
+            $query = ee()->db->get($this->table_prefix.'_titles');
 
             foreach ($query->result_array() as $row)
             {
@@ -179,7 +199,7 @@ class Structure_nav_parser
 
         ee()->load->library('typography');
 
-        $prefix = $variable_row['__prefix'];
+        $prefix = isset($variable_row['__prefix']) ? $variable_row['__prefix'] : '';
 
         unset($variable_row['__prefix']);
 
