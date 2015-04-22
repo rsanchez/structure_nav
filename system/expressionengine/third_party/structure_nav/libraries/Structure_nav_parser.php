@@ -30,18 +30,20 @@ class Structure_nav_parser
             ee()->TMPL->tagparams['include_ul']
         );
 
-        $html = $structure->nav();
+        $nav = $structure->nav();
 
         unset($structure);
 
-        if ( ! $html)
+        if ( ! $nav)
         {
             return array();
         }
 
-        $dom = new DOMDocument();
+        $charset = ee()->config->item('charset');
 
-        $dom->loadHTML('<!doctype html>'.$html);
+        $html = sprintf('<?xml version="1.0" encoding="%s"?><!doctype html>%s', $charset, $nav);
+
+        $dom = DOMDocument::loadHTML($html);
 
         $ul = $dom->getElementById('nav-sub');
 
