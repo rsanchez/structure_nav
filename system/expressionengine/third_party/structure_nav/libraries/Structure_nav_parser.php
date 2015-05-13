@@ -13,12 +13,12 @@ class Structure_nav_parser
 
         ee()->TMPL = clone $this->original_TMPL;
 
-        //publisher installed?
-        $publisher_installed = ee()->db->select('module_id')->from('modules')->where('module_name', 'Publisher')->get();
         //set the vars
         $this->table_prefix = 'channel';
         $this->publisher_installed = true;
-        if ($publisher_installed->num_rows() > 0)
+
+        //publisher installed
+        if(array_key_exists('publisher', ee()->addons->get_installed('modules')))
         {
             $this->publisher_installed = true;
             $this->table_prefix = 'publisher';
@@ -63,7 +63,7 @@ class Structure_nav_parser
         if ($add_entry_vars)
         {
             // inject custom fields etc
-           ee()->db->select($this->table_prefix.'_titles.*')
+            ee()->db->select($this->table_prefix.'_titles.*')
                 ->select($this->table_prefix.'_data.*')
                 ->select('channels.field_group')
                 ->select('channels.channel_title AS channel')
@@ -78,7 +78,7 @@ class Structure_nav_parser
                 ee()->db->where($this->table_prefix.'_data.publisher_lang_id', ee()->publisher_lib->lang_id);
                 ee()->db->where($this->table_prefix.'_titles.publisher_lang_id', ee()->publisher_lib->lang_id);
             }
-
+            
             //get the result
             $query = ee()->db->get($this->table_prefix.'_titles');
 
