@@ -43,7 +43,9 @@ class Structure_nav_parser
 
         $html = sprintf('<?xml version="1.0" encoding="%s"?><!doctype html>%s', $charset, $nav);
 
-        $dom = DOMDocument::loadHTML($html);
+        $dom = new DOMDocument();
+
+        $dom->loadHTML($html);
 
         $ul = $dom->getElementById('nav-sub');
 
