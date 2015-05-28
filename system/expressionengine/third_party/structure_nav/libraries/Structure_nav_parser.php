@@ -16,6 +16,11 @@ class Structure_nav_parser
 
     public function get_variables($add_entry_vars = false)
     {
+        if ( ! class_exists('Structure'))
+        {
+            require_once PATH_THIRD.'structure/mod.structure.php';
+        }
+
         $structure = new Structure();
 
         ee()->TMPL->tagparams['add_unique_ids'] = 'entry_id';
