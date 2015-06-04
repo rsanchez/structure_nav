@@ -52,7 +52,9 @@ class Structure_nav_parser
 
         $dom->loadHTML($html);
 
-        $ul = $dom->getElementById('nav-sub');
+        $separator = ee()->config->item('word_separator') !== 'dash' ? '_' : '-';
+
+        $ul = $dom->getElementById('nav'.$separator.'sub');
 
         $variables = $this->parse_ul($ul);
 
@@ -371,13 +373,15 @@ class Structure_nav_parser
 
         $numLis = count($lis);
 
+        $separator = ee()->config->item('word_separator') !== 'dash' ? '_' : '-';
+
         foreach ($lis as $i => $li)
         {
             $link = $li->firstChild;
 
             $class = $li->getAttribute('class');
 
-            $entry_id = str_replace('nav-sub-', '', $li->getAttribute('id'));
+            $entry_id = str_replace('nav'.$separator.'sub'.$separator, '', $li->getAttribute('id'));
 
             $variables[$i] = array(
                 '__prefix' => $prefix,
@@ -390,7 +394,7 @@ class Structure_nav_parser
                 $prefix.'count' => $i + 1,
                 $prefix.'total_results' => $numLis,
                 $prefix.'active' => !! preg_match('/\bhere\b/', $class),
-                $prefix.'has_active_child' => !! preg_match('/\bparent-here\b/', $class),
+                $prefix.'has_active_child' => !! preg_match('/\bparent'.$separator.'here\b/', $class),
             );
 
             $childUl = $li->getElementsByTagName('ul')->item(0);
