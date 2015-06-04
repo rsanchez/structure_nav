@@ -52,7 +52,7 @@ class Structure_nav_parser
 
         $dom->loadHTML($html);
 
-        $ul = $dom->getElementById('nav-sub');
+        $ul = $dom->getElementById('nav_sub');
 
         $variables = $this->parse_ul($ul);
 
