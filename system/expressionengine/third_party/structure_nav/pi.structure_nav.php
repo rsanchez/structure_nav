@@ -14,7 +14,7 @@
 
 $plugin_info = array(
     'pi_name'   => 'Structure Nav',
-    'pi_version'  => '1.0.6',
+    'pi_version'  => '1.0.7',
     'pi_author'   => 'rsanchez',
     'pi_author_url' => 'https://github.com/rsanchez',
     'pi_description'=> 'Tag pair for custom Structure navigation',

@@ -132,7 +132,7 @@ class Structure_nav_parser
                 'modifier' => $modifier,
                 'field_id' => $field_names[$field_name],
                 'params' => $params,
-                'tagdata' => '',
+                'tagdata' => FALSE,
                 'replace' => $tag,
             );
         }
