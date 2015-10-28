@@ -216,7 +216,7 @@ class Structure_nav_parser
 
         foreach ($row as $key => $value)
         {
-            if (preg_match('/^field_(id|ft|dt)_/', $key))
+            if (preg_match('/^field_(id|ft|dt)_/', $key) || $key == 'page_url')
             {
                 continue;
             }
@@ -230,7 +230,7 @@ class Structure_nav_parser
 
         foreach ($vars_to_parse as $parse)
         {
-            if ( ! isset($row['field_id_'.$parse['field_id']]) || $key == 'page_url')
+            if ( ! isset($row['field_id_'.$parse['field_id']]))
             {
                 continue;
             }
