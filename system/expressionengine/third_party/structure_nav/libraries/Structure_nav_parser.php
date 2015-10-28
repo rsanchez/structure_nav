@@ -230,7 +230,7 @@ class Structure_nav_parser
 
         foreach ($vars_to_parse as $parse)
         {
-            if ( ! isset($row['field_id_'.$parse['field_id']]))
+            if ( ! isset($row['field_id_'.$parse['field_id']]) || $key == 'page_url')
             {
                 continue;
             }
