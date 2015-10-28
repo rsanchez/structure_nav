@@ -27,6 +27,11 @@ class Structure_nav_parser
 
     public function get_variables($add_entry_vars = false)
     {
+        if ( ! class_exists('Structure'))
+        {
+            require_once PATH_THIRD.'structure/mod.structure.php';
+        }
+
         $structure = new Structure();
 
         ee()->TMPL->tagparams['add_unique_ids'] = 'entry_id';
@@ -54,9 +59,13 @@ class Structure_nav_parser
 
         $html = sprintf('<?xml version="1.0" encoding="%s"?><!doctype html>%s', $charset, $nav);
 
-        $dom = DOMDocument::loadHTML($html);
+        $dom = new DOMDocument();
 
-        $ul = $dom->getElementById('nav-sub');
+        $dom->loadHTML($html);
+
+        $separator = ee()->config->item('word_separator') !== 'dash' ? '_' : '-';
+
+        $ul = $dom->getElementById('nav'.$separator.'sub');
 
         $variables = $this->parse_ul($ul);
 
@@ -143,7 +152,7 @@ class Structure_nav_parser
                 'modifier' => $modifier,
                 'field_id' => $field_names[$field_name],
                 'params' => $params,
-                'tagdata' => '',
+                'tagdata' => FALSE,
                 'replace' => $tag,
             );
         }
@@ -384,13 +393,15 @@ class Structure_nav_parser
 
         $numLis = count($lis);
 
+        $separator = ee()->config->item('word_separator') !== 'dash' ? '_' : '-';
+
         foreach ($lis as $i => $li)
         {
             $link = $li->firstChild;
 
             $class = $li->getAttribute('class');
 
-            $entry_id = str_replace('nav-sub-', '', $li->getAttribute('id'));
+            $entry_id = str_replace('nav'.$separator.'sub'.$separator, '', $li->getAttribute('id'));
 
             $variables[$i] = array(
                 '__prefix' => $prefix,
@@ -403,7 +414,7 @@ class Structure_nav_parser
                 $prefix.'count' => $i + 1,
                 $prefix.'total_results' => $numLis,
                 $prefix.'active' => !! preg_match('/\bhere\b/', $class),
-                $prefix.'has_active_child' => !! preg_match('/\bparent-here\b/', $class),
+                $prefix.'has_active_child' => !! preg_match('/\bparent'.$separator.'here\b/', $class),
             );
 
             $childUl = $li->getElementsByTagName('ul')->item(0);
