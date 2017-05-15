@@ -7,13 +7,6 @@ class Structure_nav_parser
     public $entry_ids = array();
     public $rows_by_entry = array();
 
-    public function __construct()
-    {
-        $this->original_TMPL = ee()->TMPL;
-
-        ee()->TMPL = clone $this->original_TMPL;
-    }
-
     public function get_variables($add_entry_vars = false)
     {
         if ( ! class_exists('Structure'))
@@ -411,11 +404,6 @@ class Structure_nav_parser
         }
 
         return $variables;
-    }
-
-    public function __destruct()
-    {
-        ee()->TMPL = $this->original_TMPL;
     }
 }
 
